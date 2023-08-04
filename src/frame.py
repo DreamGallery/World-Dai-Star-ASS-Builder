@@ -35,37 +35,17 @@ def compare(img: any, binary: any):
     return max_val
 
 
-class frame_stream(object):
-    per_0_1 = []
-    rate = 1
-    def __to_per_0_1(self, rate:float):
-        #for aegisub frame usually be 30/60
-        #[0.000, 0.033, 0.066] for 30
-        #[0.000, 0.016. 0.033, 0.050, 0.066, 0.083] for 60
-        if rate == 30.0:
-            self.per_0_1 = [0.000, 0.033, 0.066]
-        elif rate == 60.0:
-            self.per_0_1 = [0.000, 0.016, 0.033, 0.050, 0.066, 0.083]
-        else:
-            print("fps provide is not 30 or 60.")
-            return
-        self.rate = int(rate)
+class frame_stream(object):    
     
-    def frame_time(self, frames: int) ->float:
-        time = frames // self.rate + (frames % (self.rate) // (self.rate // 10)) / 10 + self.per_0_1[frames % (self.rate // 10)]
-        time_3f = '%.3f' %time
-        return float(time_3f) 
-    
-    def one_task(self, frame: any, seq: int, dialog: any, total_fps: int, axis_data: list[tuple[float, float]]):
+    def one_task(self, frame: any, frame_time_milli: float, dialog: any, total_fps: int, axis_data: list[tuple[float, float]]):
         global _current_count
         height = len(frame)
         height = len(frame)
         width = len(frame[0])
         img = frame[(height*2//3):height, 0:width]
         binary_frame = to_binary(img)
-        frame_time = self.frame_time(seq)
         matching_degree = compare(dialog, binary_frame)
-        print(seq, frame_time, matching_degree)   
+        frame_time = int((frame_time_milli // 1000 + (frame_time_milli % 1000) / 1000) * 1000) / 1000
         lock.acquire()
         axis_data.append((frame_time, matching_degree))
         _current_count += 1
@@ -79,13 +59,11 @@ class frame_stream(object):
         video_path = f"{VIDEO_PATH}/{input}"
         vc = cv2.VideoCapture(video_path)
         fps = vc.get(cv2.CAP_PROP_FPS)
-        total_fps = vc.get(cv2.CAP_PROP_FRAME_COUNT)
-        self.__to_per_0_1(fps)     
+        total_fps = vc.get(cv2.CAP_PROP_FRAME_COUNT)    
         axis_data = []
         x_axis_data = [] #x
         y_axis_data = [] #y
         dial_start = [] #time for every dialogue start
-        seq = -1
         # reverse_y_axis_data = [] #-y
         dialog = cv2.cvtColor(cv2.imread(f"{ASSET_PATH}/binary.png"), cv2.COLOR_BGR2GRAY)
         executor = ThreadPoolExecutor(max_workers=20)
@@ -93,8 +71,8 @@ class frame_stream(object):
             status, frame = vc.read()
             if not status:
                 break
-            seq += 1
-            executor.submit(self.one_task, frame, seq, dialog, total_fps, axis_data)
+            milliseconds = vc.get(cv2.CAP_PROP_POS_MSEC) 
+            executor.submit(self.one_task, frame, milliseconds, dialog, total_fps, axis_data)
         vc.release()
         axis_data.sort(key=lambda x:x[0])
         for tuple in axis_data:

@@ -16,6 +16,7 @@ def to_time(clip_time: float) -> str:
     H = clip_time // 3600
     M = (clip_time - H * 3600)//60
     S = clip_time - H * 3600 - M * 60
+    S = int(S * 100) / 100
     _time = '%02d:%02d:%05.2f' %(H,M,S)
     return _time
 
