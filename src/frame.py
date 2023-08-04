@@ -52,18 +52,20 @@ class frame_stream(object):
         self.rate = int(rate)
     
     def frame_time(self, frames: int) ->float:
-        time_s = frames // self.rate + (frames % (self.rate) // (self.rate // 10)) / 10 + self.per_0_1[frames % (self.rate // 10)]
-        return time_s 
+        time = frames // self.rate + (frames % (self.rate) // (self.rate // 10)) / 10 + self.per_0_1[frames % (self.rate // 10)]
+        time_3f = '%.3f' %time
+        return float(time_3f) 
     
-    def one_task(self, frame: any, dialog: any, total_fps: int, axis_data: list[tuple[float, float]]):
+    def one_task(self, frame: any, seq: int, dialog: any, total_fps: int, axis_data: list[tuple[float, float]]):
         global _current_count
         height = len(frame)
         height = len(frame)
         width = len(frame[0])
         img = frame[(height*2//3):height, 0:width]
         binary_frame = to_binary(img)
-        frame_time = self.frame_time(_current_count)
-        matching_degree = compare(dialog, binary_frame)       
+        frame_time = self.frame_time(seq)
+        matching_degree = compare(dialog, binary_frame)
+        print(seq, frame_time, matching_degree)   
         lock.acquire()
         axis_data.append((frame_time, matching_degree))
         _current_count += 1
@@ -83,6 +85,7 @@ class frame_stream(object):
         x_axis_data = [] #x
         y_axis_data = [] #y
         dial_start = [] #time for every dialogue start
+        seq = -1
         # reverse_y_axis_data = [] #-y
         dialog = cv2.cvtColor(cv2.imread(f"{ASSET_PATH}/binary.png"), cv2.COLOR_BGR2GRAY)
         executor = ThreadPoolExecutor(max_workers=20)
@@ -90,7 +93,8 @@ class frame_stream(object):
             status, frame = vc.read()
             if not status:
                 break
-            executor.submit(self.one_task, frame, dialog, total_fps, axis_data)
+            seq += 1
+            executor.submit(self.one_task, frame, seq, dialog, total_fps, axis_data)
         vc.release()
         axis_data.sort(key=lambda x:x[0])
         for tuple in axis_data:
