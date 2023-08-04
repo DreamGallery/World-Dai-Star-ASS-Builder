@@ -13,7 +13,7 @@ class ass_events(object):
         self.text = text
 
     def echo_dialogue(self) -> str:
-        dialogue = 'Dialogue: %d,%s,%s,%s,%s,%d,%d,%d,%s,%s' %(self.layer, self.start, self.end, self.style, self.name, self.marginL, self.marginR, self.marginV, self.effect, "")
+        dialogue = 'Dialogue: %d,%s,%s,%s,%s,%d,%d,%d,%s,%s' %(self.layer, self.start, self.end, self.style, self.name, self.marginL, self.marginR, self.marginV, self.effect, self.text)
         return dialogue
     
     @classmethod
