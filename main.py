@@ -28,32 +28,42 @@ Dial_Mask_event_eg = ass_events(layer=0, start = "0:00:00.00", end = "0:00:00.00
 Name_Mask_event_eg = ass_events(layer=0, start = "0:00:00.00", end = "0:00:00.00", style = "Default", name = "人名框遮罩示例", text = Name_Mask_text)
 content = content + Name_Mask_event_eg.echo_dialogue() + "\n" + Dial_Mask_event_eg.echo_dialogue() + "\n"
 
-for index, _time in enumerate(narration):
-    if index == 0:
-        start_time = to_time(start_time_list[0] - 0.1)
-        end_time = to_time(_time)
-    elif index % 2 != 0:
-        if index == len(narration) - 1:
-            start_time = to_time(_time)
-            end_time = to_time(video_length - 1)
+
+if len(narration):
+    for index, _time in enumerate(narration):
+        if index == 0:
+            start_time = to_time(start_time_list[0] - 0.1)
+            end_time = to_time(_time)
+        elif index % 2 != 0:
+            if index == len(narration) - 1:
+                start_time = to_time(_time)
+                end_time = to_time(video_length - 1)
+            else:
+                start_time = to_time(_time)
+                end_time = to_time(narration[index + 1])
         else:
-            start_time = to_time(_time)
-            end_time = to_time(narration[index + 1])
-    else:
-        continue
+            continue
+        Dial_Mask_event = ass_events(layer=0, start = start_time, end = end_time, style = "Default", name = "对话框遮罩", text = Dial_Mask_text)
+        Name_Mask_event = ass_events(layer=0, start = start_time, end = end_time, style = "Default", name = "人名框遮罩", text = Name_Mask_text)
+        content = content + Name_Mask_event.echo_dialogue() + "\n" + Dial_Mask_event.echo_dialogue() + "\n"
+else:
+    start_time = to_time(start_time_list[0] - 0.1)
+    end_time = to_time(video_length - 1)
     Dial_Mask_event = ass_events(layer=0, start = start_time, end = end_time, style = "Default", name = "对话框遮罩", text = Dial_Mask_text)
     Name_Mask_event = ass_events(layer=0, start = start_time, end = end_time, style = "Default", name = "人名框遮罩", text = Name_Mask_text)
     content = content + Name_Mask_event.echo_dialogue() + "\n" + Dial_Mask_event.echo_dialogue() + "\n"
+    
 
 for index, start_time in enumerate(start_time_list):
     if index == len(start_time_list) - 1:
         start_time = to_time(start_time_list[index])
         end_time = to_time(video_length - 1)
     else:
+        
         start_time = to_time(start_time_list[index])
         is_narration = False
-        for index, _time in enumerate(narration):
-            if index % 2 == 0:
+        for n_index, _time in enumerate(narration):
+            if n_index % 2 == 0:
                 narration_start = _time
             else:
                 continue
@@ -62,6 +72,7 @@ for index, start_time in enumerate(start_time_list):
                 is_narration = True
         if not is_narration:
             end_time = to_time(start_time_list[index + 1] - 0.01)
+            print(end_time)
     _event = ass_events(layer = 2, start = start_time , end = end_time , style = "手游剧情-单行")
     content = content + f"{_event.echo_dialogue()}" + "\n"
 try:
