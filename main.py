@@ -30,12 +30,12 @@ content = content + Name_Mask_event_eg.echo_dialogue() + "\n" + Dial_Mask_event_
 
 for index, _time in enumerate(narration):
     if index == 0:
-        start_time = to_time(start_time_list[0])
+        start_time = to_time(start_time_list[0] - 0.1)
         end_time = to_time(_time)
     elif index % 2 != 0:
         if index == len(narration) - 1:
             start_time = to_time(_time)
-            end_time = to_time(video_length)
+            end_time = to_time(video_length - 1)
         else:
             start_time = to_time(_time)
             end_time = to_time(narration[index + 1])
@@ -46,9 +46,9 @@ for index, _time in enumerate(narration):
     content = content + Name_Mask_event.echo_dialogue() + "\n" + Dial_Mask_event.echo_dialogue() + "\n"
 
 for index, start_time in enumerate(start_time_list):
-    if (index + 1) == len(start_time_list):
+    if index == len(start_time_list) - 1:
         start_time = to_time(start_time_list[index])
-        end_time = to_time(video_length)
+        end_time = to_time(video_length - 1)
     else:
         start_time = to_time(start_time_list[index])
         is_narration = False
