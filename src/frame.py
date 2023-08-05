@@ -15,6 +15,7 @@ config.read(os.path.join(BASE_PATH ,'config.ini'), encoding="utf-8")
 ass_file_name = config.get("Info", "ass_file_name")
 Dial_box_name = config.get("Info", "Dial_box_name")
 Degree_Threshold = config.getfloat("Option", "Degree_Threshold")
+Narration_Threshold = config.getfloat("Option", "Narration_Threshold")
 VIDEO_PATH = config.get("File PATH", "VIDEO_PATH")
 CACHE_PATH = config.get("File PATH", "CACHE_PATH")
 ASSET_PATH = config.get("File PATH", "ASSET_PATH")
@@ -55,9 +56,23 @@ class frame_stream(object):
         print(f"\rPre-Progress:({_current_count}/{total_fps})"+"{}%: ".format(percent), "▓" * (percent // 2), end="")
         sys.stdout.flush()
         lock.release()
+
+    def list_less(self, value: float, _continue: int, _list: list) -> list[tuple[int, int]]:
+        count = 0
+        temp = _continue
+        Tuple_list = []
+        for index, _value in enumerate(_list):
+            if _value < value:
+                count +=1
+                if count > temp:
+                    temp += 1
+            else:
+                if count > _continue:
+                    Tuple_list.append((index - temp + 1 , index - 1))
+                count =0
+        return Tuple_list
     
-    
-    def to_frame(self, input: str) -> list[float]:
+    def to_frame(self, input: str) -> [list[float], list[float]]:
         video_path = f"{VIDEO_PATH}/{input}"
         vc = cv2.VideoCapture(video_path)
         fps = vc.get(cv2.CAP_PROP_FPS)
@@ -66,6 +81,8 @@ class frame_stream(object):
         x_axis_data = [] #x
         y_axis_data = [] #y
         dial_start = [] #time for every dialogue start
+        narration = []
+        narration_index = []
         dia_box = to_binary(cv2.imread(f"{ASSET_PATH}/{Dial_box_name}"))
         executor = ThreadPoolExecutor(max_workers = 20)
         while vc.isOpened():
@@ -76,9 +93,10 @@ class frame_stream(object):
             executor.submit(self.one_task, frame, milliseconds, dia_box, total_fps, axis_data)
         vc.release()
         axis_data.sort(key=lambda x:x[0])
-        for tuple in axis_data:
-            x_axis_data.append(tuple[0])
-            y_axis_data.append(tuple[1])
+        for Tuple in axis_data:
+            x_axis_data.append(Tuple[0])
+            y_axis_data.append(Tuple[1])
+        narration_index = self.list_less(Narration_Threshold, int(fps), y_axis_data)
         peaks_start, _ = scipy.signal.find_peaks(y_axis_data, height = Degree_Threshold, distance = int(1.5 * fps))
         plt.figure(dpi=200, figsize=(32,8))
         plt.xlabel('time')
@@ -95,4 +113,7 @@ class frame_stream(object):
             dial_start.append(float(x_3f))
             plt.text(x, y, f"({x_3f},{y_4f})", ha = 'center', fontsize = 8)
         plt.savefig(f"{CACHE_PATH}/{fig_name}")
-        return dial_start
+        for Tuple in narration_index:
+            narration.append(float('%.3f' %x_axis_data[Tuple[0]]))
+            narration.append(float('%.3f' %x_axis_data[Tuple[1]]))
+        return dial_start, narration
