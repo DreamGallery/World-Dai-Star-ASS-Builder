@@ -72,7 +72,7 @@ class frame_stream(object):
                 count =0
         return Tuple_list
     
-    def to_frame(self, input: str) -> [list[float], list[float]]:
+    def to_frame(self, input: str) -> [list[float], list[float], float]:
         video_path = f"{VIDEO_PATH}/{input}"
         vc = cv2.VideoCapture(video_path)
         fps = vc.get(cv2.CAP_PROP_FPS)
@@ -92,6 +92,7 @@ class frame_stream(object):
             milliseconds = vc.get(cv2.CAP_PROP_POS_MSEC) 
             executor.submit(self.one_task, frame, milliseconds, dia_box, total_fps, axis_data)
         vc.release()
+        video_length = _current_count / fps
         axis_data.sort(key=lambda x:x[0])
         for Tuple in axis_data:
             x_axis_data.append(Tuple[0])
@@ -116,4 +117,4 @@ class frame_stream(object):
         for Tuple in narration_index:
             narration.append(float('%.3f' %x_axis_data[Tuple[0]]))
             narration.append(float('%.3f' %x_axis_data[Tuple[1]]))
-        return dial_start, narration
+        return dial_start, narration, video_length

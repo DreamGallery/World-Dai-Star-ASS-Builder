@@ -22,7 +22,7 @@ def to_time(clip_time: float) -> str:
     return _time
 
 stream = frame_stream()
-start_time_list, narration = stream.to_frame(video_file_name)
+start_time_list, narration, video_length = stream.to_frame(video_file_name)
 content = script_info + "\n" + garbage + "\n" + styles + "\n" + events
 Dial_Mask_event_eg = ass_events(layer=0, start = "0:00:00.00", end = "0:00:00.00", style = "Default", name = "对话框遮罩示例", text = Dial_Mask_text)
 Name_Mask_event_eg = ass_events(layer=0, start = "0:00:00.00", end = "0:00:00.00", style = "Default", name = "人名框遮罩示例", text = Name_Mask_text)
@@ -35,7 +35,7 @@ for index, _time in enumerate(narration):
     elif index % 2 != 0:
         if index == len(narration) - 1:
             start_time = to_time(_time)
-            end_time = ""
+            end_time = to_time(video_length)
         else:
             start_time = to_time(_time)
             end_time = to_time(narration[index + 1])
@@ -48,7 +48,7 @@ for index, _time in enumerate(narration):
 for index, start_time in enumerate(start_time_list):
     if (index + 1) == len(start_time_list):
         start_time = to_time(start_time_list[index])
-        end_time = ""
+        end_time = to_time(video_length)
     else:
         start_time = to_time(start_time_list[index])
         is_narration = False
