@@ -13,6 +13,7 @@ BASE_PATH = os.path.abspath(os.path.dirname(__file__)+os.path.sep+"..")
 config = configparser.ConfigParser()
 config.read(os.path.join(BASE_PATH ,'config.ini'), encoding="utf-8")
 ass_file_name = config.get("Info", "ass_file_name")
+Dial_box_name = config.get("Info", "Dial_box_name")
 VIDEO_PATH = config.get("File PATH", "VIDEO_PATH")
 CACHE_PATH = config.get("File PATH", "CACHE_PATH")
 ASSET_PATH = config.get("File PATH", "ASSET_PATH")
@@ -37,14 +38,14 @@ def compare(img: any, binary: any):
 
 class frame_stream(object):    
     
-    def one_task(self, frame: any, frame_time_milli: float, dialog: any, total_fps: int, axis_data: list[tuple[float, float]]):
+    def one_task(self, frame: any, frame_time_milli: float, dia_box: any, total_fps: int, axis_data: list[tuple[float, float]]):
         global _current_count
         height = len(frame)
         height = len(frame)
         width = len(frame[0])
         img = frame[(height*2//3):height, 0:width]
         binary_frame = to_binary(img)
-        matching_degree = compare(dialog, binary_frame)
+        matching_degree = compare(dia_box, binary_frame)
         frame_time = int((frame_time_milli // 1000 + (frame_time_milli % 1000) / 1000) * 1000) / 1000
         lock.acquire()
         axis_data.append((frame_time, matching_degree))
@@ -64,24 +65,20 @@ class frame_stream(object):
         x_axis_data = [] #x
         y_axis_data = [] #y
         dial_start = [] #time for every dialogue start
-        # reverse_y_axis_data = [] #-y
-        dialog = cv2.cvtColor(cv2.imread(f"{ASSET_PATH}/binary.png"), cv2.COLOR_BGR2GRAY)
+        dia_box = to_binary(cv2.imread(f"{ASSET_PATH}/{Dial_box_name}"))
         executor = ThreadPoolExecutor(max_workers=20)
         while vc.isOpened():
             status, frame = vc.read()
             if not status:
                 break
             milliseconds = vc.get(cv2.CAP_PROP_POS_MSEC) 
-            executor.submit(self.one_task, frame, milliseconds, dialog, total_fps, axis_data)
+            executor.submit(self.one_task, frame, milliseconds, dia_box, total_fps, axis_data)
         vc.release()
         axis_data.sort(key=lambda x:x[0])
         for tuple in axis_data:
             x_axis_data.append(tuple[0])
             y_axis_data.append(tuple[1])
         peaks_start, _ = scipy.signal.find_peaks(y_axis_data, height=0.9, distance=int(1.5 * fps))
-        # for degree in y_axis_data:    
-        #     reverse_y_axis_data.append(-degree)
-        # peaks_narration, _ = scipy.signal.find_peaks(reverse_y_axis_data, height=-0.3, distance=int(1.5 * fps))
         plt.figure(dpi=200, figsize=(32,8))
         plt.xlabel('time')
         plt.ylabel('matching degree')
@@ -91,7 +88,6 @@ class frame_stream(object):
         plt.yticks(np.arange(0, 1, 0.02))
         plt.plot(x_axis_data, y_axis_data, alpha=0.5, linewidth=1)
         plt.plot(np.array(x_axis_data)[peaks_start], np.array(y_axis_data)[peaks_start], "o")
-        # plt.plot(np.array(x_axis_data)[peaks_narration], np.array(y_axis_data)[peaks_narration], "o")
         for x, y in zip(np.array(x_axis_data)[peaks_start], np.array(y_axis_data)[peaks_start]):
             x_3f = '%.3f' %x
             y_4f = '%.4f' %y
