@@ -1,5 +1,5 @@
 **/__pycache__
-.ass
-.png
-.mp4
+*.ass
+*.png
+*.mp4
 !asset
