@@ -39,6 +39,7 @@ styles = f"\
 [V4+ Styles]\n\
 {ass_styles.echo_format()}\n\
 {style_1.echo()}\n\
+{style_2.echo()}\n\
 "
 
 events = f"\
