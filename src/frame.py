@@ -40,14 +40,13 @@ def compare(img: any, binary: any):
 
 class frame_stream(object):    
     
-    def one_task(self, frame: any, frame_time_milli: float, dia_box: any, total_fps: int, axis_data: list[tuple[float, float]]):
+    def one_task(self, frame: any, frame_time_milli: float, dial_box: any, total_fps: int, axis_data: list[tuple[float, float]]):
         global _current_count
-        height = len(frame)
         height = len(frame)
         width = len(frame[0])
         img = frame[(height*2//3):height, 0:width]
         binary_frame = to_binary(img)
-        matching_degree = compare(dia_box, binary_frame)
+        matching_degree = compare(dial_box, binary_frame)
         frame_time = int((frame_time_milli // 1000 + (frame_time_milli % 1000) / 1000) * 1000) / 1000
         lock.acquire()
         axis_data.append((frame_time, matching_degree))

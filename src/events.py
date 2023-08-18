@@ -1,25 +1,25 @@
 class ass_events(object):
 
-    def __init__(self, layer: int = 0, start: str = "", end: str = "", style: str = "", name: str = "", marginL: int = 0, marginR: int = 0, marginV: int = 0, effect: str = "", text: str = ""):
-        self.layer = layer
-        self.start = start
-        self.end = end
-        self.style = style
-        self.name = name
-        self.marginL = marginL
-        self.marginR = marginR
-        self.marginV = marginV
-        self.effect = effect
-        self.text = text
+    def __init__(self, Layer: int = 0, Start: str = "", End: str = "", Style: str = "", Name: str = "", MarginL: int = 0, MarginR: int = 0, MarginV: int = 0, Effect: str = "", Text: str = ""):
+        self.Layer = Layer
+        self.Start = Start
+        self.End = End
+        self.Style = Style
+        self.Name = Name
+        self.MarginL = MarginL
+        self.MarginR = MarginR
+        self.MarginV = MarginV
+        self.Effect = Effect
+        self.Text = Text
 
     def echo_dialogue(self) -> str:
-        dialogue = 'Dialogue: %d,%s,%s,%s,%s,%d,%d,%d,%s,%s' %(self.layer, self.start, self.end, self.style, self.name, self.marginL, self.marginR, self.marginV, self.effect, self.text)
+        dialogue = 'Dialogue: %d,%s,%s,%s,%s,%d,%d,%d,%s,%s' %(self.Layer, self.Start, self.End, self.Style, self.Name, self.MarginL, self.MarginR, self.MarginV, self.Effect, self.Text)
         return dialogue
     
     @classmethod
-    def echo_format(self) -> str:
+    def echo_format(cls) -> str:
         _format = "Format:"
-        for attribute in self.__init__.__code__.co_varnames[1:]:
+        for attribute in cls.__init__.__code__.co_varnames[1:]:
             _format = _format + f" {attribute},"
         _format = _format[:-2]
         return _format

@@ -24,8 +24,8 @@ def to_time(clip_time: float) -> str:
 stream = frame_stream()
 start_time_list, narration, video_length = stream.to_frame(video_file_name)
 content = script_info + "\n" + garbage + "\n" + styles + "\n" + events
-Dial_Mask_event_eg = ass_events(layer=0, start = "0:00:00.00", end = "0:00:00.00", style = "Default", name = "对话框遮罩示例", text = Dial_Mask_text)
-Name_Mask_event_eg = ass_events(layer=0, start = "0:00:00.00", end = "0:00:00.00", style = "Default", name = "人名框遮罩示例", text = Name_Mask_text)
+Dial_Mask_event_eg = ass_events(Layer=0, Start = "0:00:00.00", End = "0:00:00.00", Style = "Default", Name = "对话框遮罩示例", Text = Dial_Mask_text)
+Name_Mask_event_eg = ass_events(Layer=0, Start = "0:00:00.00", End = "0:00:00.00", Style = "Default", Name = "人名框遮罩示例", Text = Name_Mask_text)
 content = content + Name_Mask_event_eg.echo_dialogue() + "\n" + Dial_Mask_event_eg.echo_dialogue() + "\n"
 
 
@@ -43,14 +43,14 @@ if len(narration):
                 end_time = to_time(narration[index + 1])
         else:
             continue
-        Dial_Mask_event = ass_events(layer=0, start = start_time, end = end_time, style = "Default", name = "对话框遮罩", text = Dial_Mask_text)
-        Name_Mask_event = ass_events(layer=0, start = start_time, end = end_time, style = "Default", name = "人名框遮罩", text = Name_Mask_text)
+        Dial_Mask_event = ass_events(Layer=0, Start = start_time, End = end_time, Style = "Default", Name = "对话框遮罩", Text = Dial_Mask_text)
+        Name_Mask_event = ass_events(Layer=0, Start = start_time, End = end_time, Style = "Default", Name = "人名框遮罩", Text = Name_Mask_text)
         content = content + Name_Mask_event.echo_dialogue() + "\n" + Dial_Mask_event.echo_dialogue() + "\n"
 else:
     start_time = to_time(start_time_list[0] - 0.1)
     end_time = to_time(video_length - 1)
-    Dial_Mask_event = ass_events(layer=0, start = start_time, end = end_time, style = "Default", name = "对话框遮罩", text = Dial_Mask_text)
-    Name_Mask_event = ass_events(layer=0, start = start_time, end = end_time, style = "Default", name = "人名框遮罩", text = Name_Mask_text)
+    Dial_Mask_event = ass_events(Layer=0, Start = start_time, End = end_time, Style = "Default", Name = "对话框遮罩", Text = Dial_Mask_text)
+    Name_Mask_event = ass_events(Layer=0, Start = start_time, End = end_time, Style = "Default", Name = "人名框遮罩", Text = Name_Mask_text)
     content = content + Name_Mask_event.echo_dialogue() + "\n" + Dial_Mask_event.echo_dialogue() + "\n"
     
 
@@ -72,8 +72,7 @@ for index, start_time in enumerate(start_time_list):
                 is_narration = True
         if not is_narration:
             end_time = to_time(start_time_list[index + 1] - 0.01)
-            print(end_time)
-    _event = ass_events(layer = 2, start = start_time , end = end_time , style = "手游剧情-单行")
+    _event = ass_events(Layer = 2, Start = start_time , End = end_time , Style = "手游剧情-单行")
     content = content + f"{_event.echo_dialogue()}" + "\n"
 try:
     with open(f"{ASS_PATH}/{ass_file_name}", "w", encoding="utf8") as fp:
