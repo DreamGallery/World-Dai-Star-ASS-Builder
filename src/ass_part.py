@@ -1,10 +1,10 @@
-from src.read_ini import config
 from src.styles import *
-from src.events import ass_events
+from src.read_ini import config
+from src.events import AssEvents
 
 
-VIDEO_PATH = config.get("File PATH", "VIDEO_PATH")
-video_file_name = config.get("Info", "video_file_name")
+_VIDEO_PATH = config.get("File PATH", "VIDEO_PATH")
+_video_file_name = config.get("Info", "video_file_name")
 
 
 script_info = "\
@@ -22,8 +22,8 @@ PlayResY: 1080\n\
 garbage = f"\
 [Aegisub Project Garbage]\n\
 Last Style Storage: Default\n\
-Audio File: ../{VIDEO_PATH}/{video_file_name}\n\
-Video File: ../{VIDEO_PATH}/{video_file_name}\n\
+Audio File: ../{_VIDEO_PATH}/{_video_file_name}\n\
+Video File: ../{_VIDEO_PATH}/{_video_file_name}\n\
 Video AR Mode: \n\
 Video AR Value: \n\
 Video Zoom Percent: \n\
@@ -34,7 +34,7 @@ Video Position: \n\
 
 styles = f"\
 [V4+ Styles]\n\
-{ass_styles.echo_format()}\n\
+{AssStyles.echo_format()}\n\
 {style_1.echo()}\n\
 {style_2.echo()}\n\
 {style_3.echo()}\n\
@@ -42,6 +42,5 @@ styles = f"\
 
 events = f"\
 [Events]\n\
-{ass_events.echo_format()}\n\
+{AssEvents.echo_format()}\n\
 "
-
