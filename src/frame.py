@@ -39,8 +39,7 @@ class frame_stream(object):
     def one_task(self, frame: any, frame_time_milli: float, dial_box: any, total_fps: int, axis_data: list[tuple[float, float]]):
         global _current_count
         height = len(frame)
-        width = len(frame[0])
-        img = frame[(height*2//3):height, 0:width]
+        img = frame[(height*2//3) :, :]
         binary_frame = to_binary(img)
         matching_degree = compare(dial_box, binary_frame)
         frame_time = int((frame_time_milli // 1000 + (frame_time_milli % 1000) / 1000) * 1000) / 1000
