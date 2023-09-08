@@ -1,12 +1,9 @@
-import os
-import configparser
 from src.frame import *
+from src.read_ini import config
 from src.ass_part import script_info, garbage, styles, events
 from src.events import ass_events
 
-BASE_PATH = os.path.dirname(os.path.abspath(__file__))
-config = configparser.ConfigParser()
-config.read(os.path.join(BASE_PATH ,'config.ini'), encoding="utf-8")
+
 ASS_PATH = config.get("File PATH", "ASS_PATH")
 video_file_name = config.get("Info", "video_file_name")
 ass_file_name = config.get("Info", "ass_file_name")

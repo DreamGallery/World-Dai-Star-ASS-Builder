@@ -1,17 +1,13 @@
-import os
 import cv2
 import sys
 import threading
-import configparser
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal
+from src.read_ini import config
 from concurrent.futures import ThreadPoolExecutor
 
 
-BASE_PATH = os.path.abspath(os.path.dirname(__file__)+os.path.sep+"..")
-config = configparser.ConfigParser()
-config.read(os.path.join(BASE_PATH ,'config.ini'), encoding="utf-8")
 ass_file_name = config.get("Info", "ass_file_name")
 Dial_box_name = config.get("Info", "Dial_box_name")
 Degree_Threshold = config.getfloat("Option", "Degree_Threshold")

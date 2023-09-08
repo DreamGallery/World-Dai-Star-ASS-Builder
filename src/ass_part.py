@@ -1,11 +1,8 @@
-import os
-import configparser
+from src.read_ini import config
 from src.styles import *
 from src.events import ass_events
 
-BASE_PATH = os.path.abspath(os.path.dirname(__file__)+os.path.sep+"..")
-config = configparser.ConfigParser()
-config.read(os.path.join(BASE_PATH ,'config.ini'), encoding="utf-8")
+
 VIDEO_PATH = config.get("File PATH", "VIDEO_PATH")
 video_file_name = config.get("Info", "video_file_name")
 
