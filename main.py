@@ -81,7 +81,7 @@ for index, start_time in enumerate(start_time_list):
                 end_time = to_time(narration_start - 0.01)
                 is_narration = True
         if not is_narration:
-            end_time = to_time(start_time_list[index + 1] - 0.01)
+            end_time = to_time(start_time_list[index + 1])
     dial_event = AssEvents(Layer=2, Start=start_time, End=end_time, Style="手游剧情-单行")
     content = content + f"{dial_event.echo_dialogue()}" + "\n"
 try:
