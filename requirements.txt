@@ -1,4 +1,6 @@
-matplotlib
+lz4
+msgpack_python
 numpy
 opencv_contrib_python
-scipy
+Pillow
+Requests

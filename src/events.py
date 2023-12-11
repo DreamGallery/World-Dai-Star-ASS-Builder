@@ -34,9 +34,24 @@ class AssEvents(object):
             self.MarginR,
             self.MarginV,
             self.Effect,
-            self.Text,
+            "",
         )
         return dialogue
+
+    def echo_comment(self) -> str:
+        comment = "Comment: %d,%s,%s,%s,%s,%d,%d,%d,%s,%s" % (
+            self.Layer,
+            self.Start,
+            self.End,
+            self.Style,
+            self.Name,
+            self.MarginL,
+            self.MarginR,
+            self.MarginV,
+            self.Effect,
+            self.Text,
+        )
+        return comment
 
     @classmethod
     def echo_format(cls) -> str:

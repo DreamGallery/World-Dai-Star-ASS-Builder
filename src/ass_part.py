@@ -38,6 +38,7 @@ styles = f"\
 {style_1.echo()}\n\
 {style_2.echo()}\n\
 {style_3.echo()}\n\
+{style_4.echo()}\n\
 "
 
 events = f"\

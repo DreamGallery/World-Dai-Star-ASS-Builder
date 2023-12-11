@@ -3,4 +3,6 @@
 *.ass
 *.png
 *.mp4
+*.json
 !asset
+

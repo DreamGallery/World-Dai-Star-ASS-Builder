@@ -93,3 +93,4 @@ class AssStyles(object):
 style_1 = AssStyles(*json.loads(config.get("ASS Style", "style_1")))
 style_2 = AssStyles(*json.loads(config.get("ASS Style", "style_2")))
 style_3 = AssStyles(*json.loads(config.get("ASS Style", "style_3")))
+style_4 = AssStyles(*json.loads(config.get("ASS Style", "style_4")))
