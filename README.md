@@ -1,29 +1,45 @@
-﻿# WORLD DAI STAR ASS BUILDER
+﻿# WORLD DAI STAR ASS BUILDER (V2)
 
-This is a tool to generate a rough subtitle file for World Dai Star story(not stage show).
+Using `OPENCV2` to match video image and auto create subtitle timeline for `Aegisub`
 
-Using `OPENCV2` to create an analysis chart like this
-![image](cache/电姬主线第一章第五话.png)
-As you can see，the point of mutation is where a word begins.<br />
-So, you can also change the image of dialogue box(in `asset` folder) to make this tool universal to other games.
+## Usage
 
-# Usage
-
-install requirement
-
+### Get from the repository
 ```
-pip3 install -r requirements.txt
+git clone https://github.com/DreamGallery/World-Dai-Star-ASS-Builder.git
+cd World-Dai-Star-ASS-Builder
 ```
 
-Edit `[Info]` in `config.ini` first, put video file in `video`, and run with
+### Install requirement
 
+```
+pip install -r requirements.txt
+```
+
+Before running, edit the section `[Info]` and section `[Download Data]` in `config.ini`.<br />
+The preset in `config.ini` is for `[1920x1080]`, so if your recorded video is at is resolution, put your video into video folder.<br />
+※ If your want to change some options, more information for you in the `config.ini` 
+
+### Download Episode files
+```
+python story_unpack.py
+``` 
+This is just a simple script to get the necessary data for the tool to run. <br />
+If you want to get more detailed data, you can find solutions in these repository: <br />
+[WDS-Adv-Resource](https://github.com/nan0521/WDS-Adv-Resource)&emsp;[sirius-toolbox](https://github.com/SonolusHaniwa/sirius-toolbox)
+
+### Start matching
+Now you have completed all the preparation, just run with
 ```
 python main.py
 ```
+and wait for the process to finish and you will find the `.ass` file in `ass` folder
 
-The `.ass` file will saved in `ass` and you can find the image of analysis chart in `cache` with the name you set for subtitle.
+## Some notes on upgrading from V1 to V2
+In the `V1 version`, the tool is just match with the empty dialog box, by analyzing the changes in match rates, draw a line graph.<br />
+The abrupt points in the graph are where the dialogue begins and ends, this can only generate a rough timeline.
 
-The generated subtitle timeline just a rough ones, so don't place too much hope on the accuracy of the tool, and there are still some places need you to correct, but it can actually improve a lot of efficiency.<br />
-Because there may be some filters after narrations, you can slightly reduce the value of `Degree_Threshold`.
-
-In the end, I hope you can enjoy the story of `World Dai Star`!
+After upgrading to `V2 version`, the tool starts matching names and dialogue text directly.<br />
+By using `Pillow` to draw text image, and match with `OPENCV Template match` method, this improved the accuracy of timeline.<br />
+You don't need to add timeline of names manually anymore, there will also be comments of original Japanese text here that you can compare to translate or just fill in the translated text.<br />
+The only thing that you may need to pay attention to is the fade in and fade out effect, adjust it according to your mood.  
