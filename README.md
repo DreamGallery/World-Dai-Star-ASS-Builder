@@ -17,7 +17,7 @@ pip install -r requirements.txt
 ```
 
 Before running, edit the section `[Info]` and section `[Download Data]` in `config.ini`.<br />
-The preset in `config.ini` is for `[1920x1080]`, so if your recorded video is at is resolution, put your video into video folder.<br />
+The preset in `config.ini` is for `[1920x1080]`, so if your recorded video is at this resolution, just put your video into the `video` folder.<br />
 ※ If your want to change some options, more information for you in the `config.ini` 
 
 ### Download Episode files
@@ -34,6 +34,14 @@ Now you have completed all the preparation, just run with
 python main.py
 ```
 and wait for the process to finish and you will find the `.ass` file in `ass` folder
+
+### ※ For speaker name translate
+A Chinese translation checklist is preset in `src/speaker.py`, if you want to add more correspondence, you can do it like this
+```
+···
+"しぐれ": "时雨",
+"Speaker name": "Translated name",
+``` 
 
 ## Some notes on upgrading from V1 to V2
 In the `V1 version`, the tool is just match with the empty dialog box, by analyzing the changes in match rates, draw a line graph.<br />
