@@ -25,21 +25,21 @@ def draw_text(
     font = ImageFont.truetype(font_path, font_size)
 
     char_info: list[tuple[FreeTypeFont, int]] = []
-    text_height = int(0)
+    text_height = 0
     for char in text:
         char_bbox = font.getbbox(char, stroke_width=stroke_width)
         char_width = char_bbox[2] - char_bbox[0] - stroke_width
         text_height = max((char_bbox[3] - char_bbox[1]), text_height)
         char_info.append([font, char_width])
 
-    text_width = int(0)
+    text_width = 0
     for info in char_info:
         text_width += info[1]
     text_size = ((text_width + (len(text) - 1) * kerning), text_height)
     text_img = Image.new("RGBA", text_size)
     draw = ImageDraw.Draw(text_img)
 
-    tmp_width = int(0)
+    tmp_width = 0
     for index, char in enumerate(text):
         draw.text(
             (((char_info[index][1]) // 2 + tmp_width), (text_size[1] // 2)),

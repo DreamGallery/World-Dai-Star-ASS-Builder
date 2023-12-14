@@ -23,6 +23,7 @@ _check_list = {
     "しぐれ": "时雨",
 }
 
+
 def get_translate(speaker_name: str) -> str:
     if _check_list.__contains__(speaker_name):
         translated_name = _check_list[speaker_name]

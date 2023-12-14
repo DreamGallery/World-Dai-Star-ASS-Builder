@@ -18,7 +18,7 @@ _speaker_name_area = tuple(json.loads(config.get("Area", "speaker_name_area")))
 
 
 _lock = threading.Lock()
-_current_count = int(0)
+_current_count = 0
 
 
 class FrameProcess(object):
