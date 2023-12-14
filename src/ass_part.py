@@ -3,7 +3,7 @@ from src.read_ini import config
 from src.events import AssEvents
 
 
-_VIDEO_PATH = config.get("File PATH", "VIDEO_PATH")
+_VIDEO_PATH = config.get("File Path", "VIDEO_PATH")
 _video_file_name = config.get("Info", "video_file_name")
 
 

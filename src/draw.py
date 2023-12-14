@@ -20,15 +20,15 @@ def to_binary_adaptive(img: cv2.typing.MatLike, blocksize: int, C: float) -> cv2
 
 
 def draw_text(
-    text: str, font_path: str, fontsize: int, strokewidth: int, kerning: int
+    text: str, font_path: str, font_size: int, stroke_width: int, kerning: int
 ) -> tuple[list[cv2.typing.MatLike], list[cv2.typing.MatLike]]:
-    font = ImageFont.truetype(font_path, fontsize)
+    font = ImageFont.truetype(font_path, font_size)
 
     char_info: list[tuple[FreeTypeFont, int]] = []
     text_height = int(0)
     for char in text:
-        char_bbox = font.getbbox(char, stroke_width=strokewidth)
-        char_width = char_bbox[2] - char_bbox[0] - strokewidth
+        char_bbox = font.getbbox(char, stroke_width=stroke_width)
+        char_width = char_bbox[2] - char_bbox[0] - stroke_width
         text_height = max((char_bbox[3] - char_bbox[1]), text_height)
         char_info.append([font, char_width])
 
@@ -46,7 +46,7 @@ def draw_text(
             char,
             anchor="mm",
             font=char_info[index][0],
-            stroke_width=strokewidth,
+            stroke_width=stroke_width,
             stroke_fill=(32, 32, 32),
         )
         tmp_width = tmp_width + char_info[index][1] + kerning

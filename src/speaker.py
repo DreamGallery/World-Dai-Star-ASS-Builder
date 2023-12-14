@@ -1,4 +1,4 @@
-_Checklist = {
+_check_list = {
     "ここな": "心菜",
     "静香": "静香",
     "カトリナ": "卡特莉娜",
@@ -23,9 +23,9 @@ _Checklist = {
     "しぐれ": "时雨",
 }
 
-def get_translate(Speaker_name: str) -> str:
-    if _Checklist.__contains__(Speaker_name):
-        translated_name = _Checklist[Speaker_name]
+def get_translate(speaker_name: str) -> str:
+    if _check_list.__contains__(speaker_name):
+        translated_name = _check_list[speaker_name]
         return translated_name
     else:
-        return Speaker_name
+        return speaker_name
