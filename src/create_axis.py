@@ -155,14 +155,17 @@ def echo_phrase_event(
                         end="",
                     )
                     if image_index_1 + image_line1_tag == len(image_list) - 1:
-                        if json_index == len(episode_json) - 1 and start_time:
-                            last_index_inv = 0
-                            for info in image_info_list[::-1]:
-                                if info[1] != speaker_name:
-                                    last_index_inv += 1
-                                else:
-                                    break
-                            end_time = image_info_list[len(image_info_list) - last_index_inv][0]
+                        if json_index == len(episode_json) - 1 and not start_time:
+                            print(
+                                f"{line} still can't find the start or end time after traversing all the video."
+                            )
+                            print(
+                                "Please adjust the parameters and try again or contact me to provide details."
+                            )
+                            sys.exit(1)
+                    if not image_info_list[image_index_1 + image_line1_tag][1]:
+                        if start_time:
+                            end_time = image_info_list[image_index_1 + image_line1_tag][0]
                             phrase1_event = AssEvents(
                                 Layer=1,
                                 Start=_format_time(start_time),
@@ -175,15 +178,8 @@ def echo_phrase_event(
                             phrase_event_list.append(phrase1_event.echo_dialogue())
                             if len(lines) == 1:
                                 phrase_event_list.append(phrase1_event.echo_comment())
-                        else:
-                            print(
-                                f"{line} still can't find the start or end time after traversing all the video."
-                            )
-                            print(
-                                "Please adjust the parameters and try again or contact me to provide details."
-                            )
-                            sys.exit(1)
-                    if not image_info_list[image_index_1 + image_line1_tag][1]:
+                            image_line1_tag = image_index_1 + image_line1_tag
+                            break
                         continue
                     if not start_time and compare(
                         get_area(image, _char_area_1), char_img, _threshold, mask=char_mask
